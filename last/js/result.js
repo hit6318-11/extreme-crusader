@@ -28,16 +28,16 @@ new Vue({
         },
         // 編集ボタンクリック時の処理
         editStudent(studentId) {
-            window.location.href = `/form.html?studentId=${studentId}`; // 編集ページへのリダイレクト
+            window.location.href = `../templates/form.html?studentId=${studentId}`; // 編集ページへのリダイレクト
         },
         // 「検索へ戻る」ボタンの処理
         goBack() {
-            window.location.href = '/search.html';
+            window.location.href = '../templates/search.html';
         },
         // 「ログアウト」ボタンの処理
         logout() {
             // セッションをクリアし、ログインページにリダイレクト（仮実装）
-            window.location.href = '/login.html';
+            window.location.href = '../templates/login.html';
         }
     },
     mounted() {

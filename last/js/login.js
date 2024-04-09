@@ -16,7 +16,7 @@ new Vue({
                     console.log('Authentication successful!', response.data);
                     
                     // Vue Routerを使用せずにダッシュボードページへリダイレクト
-                    window.location.href = '/dashboard.html'; // ダッシュボードページのURLに変更してください
+                    window.location.href = '/search.html'; // ダッシュボードページのURLに変更してください
                 })
                 .catch(error => {
                     // 認証失敗時の処理
