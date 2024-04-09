@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session, render_template, request, url_for
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from databaseManager import Base, Student  # 事前に定義したStudentクラスをimport
@@ -10,6 +10,35 @@ Base.metadata.bind = engine
 
 # セッションファクトリを作成し、スレッドセーフなセッションを確保します。
 db_session = scoped_session(sessionmaker(bind=engine))
+
+
+# サイトのルーティング
+@app.route('/')
+def goToIndex():
+    return render_template(
+        "login.html"
+    )
+@app.route('/login')
+def goToLogin():
+    return render_template(
+        "login.html"
+    )
+@app.route('/search')
+def goToSearch():
+    return render_template(
+        "search.html"
+    )
+@app.route('/result')
+def goToResult():
+    return render_template(
+        "result.html"
+    )
+@app.route('/form')
+def goToForm():
+    return render_template(
+        "form.html"
+    )
+
 
 # 生徒情報の作成を行うエンドポイント
 @app.route('/students', methods=['POST'])
