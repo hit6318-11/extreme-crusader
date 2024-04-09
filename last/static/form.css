@@ -1,0 +1,76 @@
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+header span {
+  /* ユーザー名を左に配置 */
+  text-align: left;
+}
+
+header button {
+  /* ログアウトボタンを右に配置 */
+}
+
+.container {
+  width: 100%;
+  max-width: 800px; /* コンテナの最大幅を設定 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container h2 {
+  /* 生徒情報修正のタイトルを中央に配置 */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.container > button {
+  /* 削除ボタンを生徒情報修正の右に配置 */
+  align-self: flex-end;
+  margin-bottom: 20px;
+}
+
+form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+form > div {
+  width: 100%; /* 入力項目を外枠に合わせる */
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+input[type="number"],
+input[type="text"],
+input[type="date"],
+input[type="email"],
+select {
+  flex: 1;
+  margin-left: 20px; /* ラベルとの間隔 */
+}
+
+button[type="submit"] {
+  align-self: center;
+  padding: 10px 20px;
+  font-size: 18px;
+  margin-top: 20px;
+}
