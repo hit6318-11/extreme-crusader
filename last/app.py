@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session, render_template, request, url_for
+from flask import Flask, request, jsonify, session, render_template, request, url_for, redirect
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from databaseManager import Base, Student  # 事前に定義したStudentクラスをimport
@@ -14,30 +14,42 @@ db_session = scoped_session(sessionmaker(bind=engine))
 
 # サイトのルーティング
 @app.route('/')
-def goToIndex():
+def index():
     return render_template(
         "login.html"
     )
-@app.route('/login')
-def goToLogin():
-    return render_template(
-        "login.html"
-    )
+@app.route('/login', methods = ["POST", "GET"])
+def login():
+    # if request.method == "POST":
+    #     session.permanent = True 
+    #     user = request.form["nm"]
+    #     session["user"] = user
+    #     return redirect(url_for("search"))
+    # else:
+    #     if "user" in session:
+    #         return redirect(url_for("search"))
+        return render_template("login.html")
 @app.route('/search')
-def goToSearch():
-    return render_template(
-        "search.html"
-    )
+def search():
+    # if "user" in session:
+    #     user = session["user"]
+        return render_template("search.html")
+    # else:
+        # return redirect(url_for("login"))
 @app.route('/result')
-def goToResult():
-    return render_template(
-        "result.html"
-    )
+def result():
+    # if "user" in session:
+    #     user = session["user"]
+        return render_template("result.html")
+    # else:
+        # return redirect(url_for("login"))
 @app.route('/form')
-def goToForm():
-    return render_template(
-        "form.html"
-    )
+def form():
+    # if "user" in session:
+    #     user = session["user"]
+        return render_template("form.html")
+    # else:
+        # return redirect(url_for("login"))
 
 
 # 生徒情報の作成を行うエンドポイント
