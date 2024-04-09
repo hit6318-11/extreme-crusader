@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student Information</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body>
+<div id="app">
+    <header>
+        <span>{{ username }}</span>
+        <button @click="logout">ログアウト</button>
+    </header>
+
+    <section>
+        <div class="container">
+            <h2>生徒情報修正</h2>
+            <button @click="confirmDelete">削除</button>
+            <form @submit.prevent="confirmAndSubmit">
+                <div>
+                    <label for="id">No:</label>
+                    <input type="number" id="id" v-model.number="student.id" min="1" max="9999">
+                </div>
+                <div>
+                    <label for="lastName">姓:</label>
+                    <input type="text" id="lastName" v-model="student.lastName" maxlength="64">
+                </div>
+                <div>
+                    <label for="firstName">名:</label>
+                    <input type="text" id="firstName" v-model="student.firstName" maxlength="64">
+                </div>
+                <div>
+                    <label for="lastNameKana">姓（カタカナ）:</label>
+                    <input type="text" id="lastNameKana" v-model="student.lastNameKana" maxlength="64">
+                </div>
+                <div>
+                    <label for="firstNameKana">名（カタカナ）:</label>
+                    <input type="text" id="firstNameKana" v-model="student.firstNameKana" maxlength="64">
+                </div>
+                <div>
+                    <label for="birthday">生年月日:</label>
+                    <input type="date" id="birthday" v-model="student.birthday">
+                </div>
+                <div>
+                    <label for="gender">性別:</label>
+                    <select id="gender" v-model="student.gender">
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                        <option value="3">その他</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="email">メールアドレス:</label>
+                    <input type="email" id="email" v-model="student.email" maxlength="128">
+                </div>
+                <div>
+                    <label for="phone">電話番号:</label>
+                    <input type="text" id="phone" v-model="student.phone" maxlength="10">
+                </div>
+                <div>
+                    <label for="mobilePhone">携帯電話番号:</label>
+                    <input type="text" id="mobilePhone" v-model="student.mobilePhone" maxlength="10">
+                </div>
+                <div>
+                    <label for="postalCode">郵便番号:</label>
+                    <input type="text" id="postalCode" v-model="student.postalCode" maxlength="7">
+                </div>
+                <div>
+                    <label for="address">住所:</label>
+                    <input type="text" id="address" v-model="student.address" maxlength="256">
+                </div>
+                <div>
+                    <label for="classId">クラス:</label>
+                    <select id="classId" v-model="student.classId">
+                        <!-- クラス選択肢の例 -->
+                        <option v-for="option in classOptions" :value="option.value">{{ option.text }}</option>
+                    </select>
+                </div>
+                <button type="submit">送信</button>
+            </form>
+        </div>
+    </section>
+</div>
+
+
+</body>
+</html>
