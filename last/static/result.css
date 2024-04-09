@@ -1,0 +1,62 @@
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-results {
+  width: 100%;
+  max-width: 800px; /* コンテナの最大幅を設定 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-results select {
+  align-self: flex-start; /* ドロップダウンを左に寄せる */
+}
+
+.search-results button {
+  margin-left: auto; /* setボタンを右に寄せる */
+  margin-bottom: 20px; /* ボタンとテーブルの間隔 */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center; /* テーブルのテキストを中央揃え */
+  margin-bottom: 20px; /* テーブルの下の余白 */
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+thead {
+  background-color: #f9f9f9;
+}
+
+button {
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ヘッダーのボタンスタイル */
+header button {
+  padding: 10px 20px;
+  margin: 0 5px;
+}
