@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from models import Base, Student  # 事前に定義したStudentクラスをimport
+from databaseManager import Base, Student  # 事前に定義したStudentクラスをimport
 
 app = Flask(__name__)
 # SQLiteデータベース 'school.db' への接続を設定します。
