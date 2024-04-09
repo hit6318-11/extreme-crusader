@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <form @submit.prevent="login">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" v-model="credentials.username" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" v-model="credentials.password" required>
+            </div>
+            <div>
+                <button type="submit">Login</button>
+            </div>
+            <p v-if="loginError">{{ errorMessage }}</p>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="login.js"></script>
+</body>
+</html>

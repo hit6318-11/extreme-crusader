@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Page</title>
+</head>
+<body>
+    <h1>Search</h1>
+    <select id="search_category">
+        <option value="id">ID</option>
+        <option value="name">姓名</option>
+        <option value="kana_name">姓名(カタカナ)</option>
+        <option value="birthdate">生年月日</option>
+        <option value="gender">性別</option>
+        <option value="email">メールアドレス</option>
+        <option value="phone">電話番号</option>
+        <option value="postal_code">郵便番号</option>
+        <option value="address">住所</option>
+        <option value="class">クラス</option>
+        <option value="completed">修了</option>
+        <option value="course_name">コース名</option>
+        <option value="classroom">教室</option>
+    </select>
+    <input type="text" id="search_term" placeholder="Search...">
+    <button onclick="search()">Search</button>
+    <div id="results"></div>
+    
+    <script src="./search.js"></script>
+</body>
+</html>
