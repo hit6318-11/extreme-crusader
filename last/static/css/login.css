@@ -1,4 +1,4 @@
-/* 全体のフォントサイズを大きくする */
+/* 全体のフォントサイズと配置を調整 */
 body {
   font-family: Arial, sans-serif;
   font-size: 16px;
@@ -9,31 +9,36 @@ body {
   margin: 0;
 }
 
-/* フォームとその要素を中央に配置し、スタイリングする */
+/* ログインフォームのスタイリング */
 #app {
   width: 100%;
-  max-width: 400px; /* 適切な最大幅を設定 */
+  max-width: 400px;
   margin: auto;
   padding: 20px;
+  padding-top: 60px; /* 新規登録ボタンの分の上部スペースを追加 */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  position: relative;
 }
 
-form div {
+/* 各フォーム要素のマージン調整 */
+form div:not(:first-child) {
   margin-bottom: 20px;
 }
 
+/* テキストとパスワード入力フィールドのスタイリング */
 input[type="text"],
 input[type="password"] {
   width: 100%;
   padding: 10px;
   margin-top: 8px;
-  box-sizing: border-box; /* パディングを幅に含める */
+  box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
   display: block;
 }
 
+/* ログインボタンのスタイリング */
 button[type="submit"] {
   background-color: #007bff;
   color: white;
@@ -41,9 +46,31 @@ button[type="submit"] {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 18px; /* ボタンのフォントサイズを大きくする */
+  font-size: 18px;
+  display: block;
+  margin: 0 auto;
 }
 
+/* ログインボタンのホバーエフェクト */
 button[type="submit"]:hover {
   background-color: #0056b3;
+}
+
+/* 新規登録ボタンのスタイリング */
+button[type="button"] {
+  background-color: #ff0000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+/* 新規登録ボタンのホバーエフェクト */
+button[type="button"]:hover {
+  background-color: #cc0000;
 }

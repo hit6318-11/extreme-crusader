@@ -23,6 +23,10 @@ new Vue({
                     this.loginError = true;
                     console.error('Authentication failed', error);
                 });
+        },
+        register: function() {
+            // ユーザー登録画面へリダイレクト
+            window.location.href = '../../templates/register.html'; // ユーザー登録画面のURLに適宜変更してください
         }
     }
 });
