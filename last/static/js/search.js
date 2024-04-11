@@ -2,8 +2,8 @@ function search() {
     var searchCategory = document.getElementById('search_category').value;
     var searchTerm = document.getElementById('search_term').value;
     
-    fetch('/search', {
-        method: 'POST',
+    fetch('/students', {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
@@ -11,10 +11,8 @@ function search() {
     })
     .then(response => response.json())
     .then(data => {
-        var resultsDiv = document.getElementById('results');
-        resultsDiv.innerHTML = '';
-        data.forEach(item => {
-            resultsDiv.innerHTML += `<p>${JSON.stringify(item)}</p>`;
+        sessionStorage.setItem('searchResults', JSON.stringify(data)); // 検索結果をセッションストレージに保存
+        window.location.href = '../templates/result.html'; // result.htmlへリダイレクト
+        
         });
-    });
 }

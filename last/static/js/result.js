@@ -8,14 +8,19 @@ new Vue({
     methods: {
         // サーバーから検索結果を取得
         fetchResults() {
-            axios.get('/api/search-results') // サーバーのエンドポイントを指定
-                .then(response => {
-                    this.students = response.data; // レスポンスでstudents配列を更新
-                })
-                .catch(error => {
-                    console.error('Error fetching results:', error);
-                });
-        },
+                // セッションストレージから検索結果を取得
+                const results = sessionStorage.getItem('searchResults');
+                if (results) {
+                    // セッションストレージに検索結果が存在する場合、それを解析してstudents配列に設定
+                    this.students = JSON.parse(results);
+                    // 使用後はセッションストレージから検索結果を削除
+                    sessionStorage.removeItem('searchResults'); 
+                } else {
+                    // 検索結果が存在しない場合の処理
+                    console.log('No search results found.');
+                }
+            },
+            
         // 選択されたオプションに基づいて結果を並び替え
         sortResults() {
             if (this.selectedSort) {

@@ -1,14 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Page</title>
     <link rel="stylesheet" href="../static/css/search.css">
 </head>
 <body>
-    <h1>Search</h1>
+    <button  @click="register">生徒新規登録</button>
+    <h1>検索</h1>
     <select id="search_category">
+        <option value="all" selected>すべて</option>
         <option value="id">ID</option>
-        <option value="name">姓名</option>
+        <option value="name">姓名<option value="id">ID</option></option>
         <option value="kana_name">姓名(カタカナ)</option>
         <option value="birthdate">生年月日</option>
         <option value="gender">性別</option>
@@ -24,7 +28,10 @@
     <input type="text" id="search_term" placeholder="Search...">
     <button onclick="search()">Search</button>
     <div id="results"></div>
-    
+    <script>
+        let test = {{url_for}}
+    </script>
     <script src="../static/js/search.js"></script>
 </body>
 </html>
+
