@@ -45,5 +45,5 @@ class Classroom(Base):
     # Relation to Class
     classes = relationship("Class", back_populates="classroom")
 
-engine = create_engine('sqlite:///school.db')
+engine = create_engine('sqlite:///db/school.db')
 Base.metadata.create_all(engine)

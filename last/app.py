@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify, session, render_template, request, url_for, redirect
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from databaseManager import Base, Student  # 事前に定義したStudentクラスをimport
+from databaseManager import Base, Student,User  # 事前に定義したStudentクラスをimport
 
 app = Flask(__name__)
 # SQLiteデータベース 'school.db' への接続を設定します。
-engine = create_engine('sqlite:///school.db')
+engine = create_engine('sqlite:///db/school.db')
 Base.metadata.bind = engine
 
 # セッションファクトリを作成し、スレッドセーフなセッションを確保します。
