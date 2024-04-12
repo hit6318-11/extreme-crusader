@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, session, render_template, request, url_for, redirect
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import scoped_session, sessionmaker
 from databaseManager import Base, Student,User  # 事前に定義したStudentクラスをimport
 
@@ -62,16 +62,38 @@ def create_student():
     return jsonify(student.id), 201  # 作成した生徒のIDとHTTPステータスコード201を返す
 
 # 生徒情報の取得を行うエンドポイント
-@app.route('/students', methods=['GET'])
+@app.route('/api/students', methods=['GET'])
 def get_students():
-    students = db_session.query(Student).all()  # すべての生徒情報を取得
+    # リクエストからクエリパラメータを辞書形式で取得する
+    query_parameters = request.args.to_dict()
+
+    # 全ての生徒を取得するためのベースクエリを初期化する
+    base_query = db_session.query(Student)
+
+    # OR 条件のリストを初期化する
+    or_conditions = []
+
+    # クエリパラメータを繰り返し処理し、各属性に対するフィルタリング条件を動的に構築する
+    for attr, value in query_parameters.items():
+        # 各属性に対するフィルタリング条件を動的に構築する
+        # 簡単のため、すべての属性が文字列型であると仮定する
+        column = getattr(Student, attr)
+        or_conditions.append(column.ilike(f'%{value}%'))
+
+    # OR 条件を結合してフィルタリング条件を作成する
+    filter_condition = or_(*or_conditions)
+
+    # フィルタリング条件をベースクエリに適用する
+    students = base_query.filter(filter_condition).all()
+
+    # 生徒データをJSON形式に整形して返す
     return jsonify([{
         'id': student.id,
         'first_name': student.first_name,
         'last_name': student.last_name,
         'last_name_katakana': student.last_name_katakana,
         'first_name_katakana': student.first_name_katakana,
-        'birthday': student.birthday.isoformat(),  # 日付はISOフォーマットに変換
+        'birthday': student.birthday.isoformat(),  
         'gender': student.gender,
         'email': student.email,
         'phone': student.phone,
@@ -80,7 +102,7 @@ def get_students():
         'address': student.address,
         'class_id': student.class_id,
         'status': student.status
-    } for student in students])  # 生徒情報をJSON形式で返す
+    } for student in students])
 
 # 生徒情報の更新を行うエンドポイント
 @app.route('/students/<int:student_id>', methods=['PUT'])
