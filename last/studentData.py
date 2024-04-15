@@ -1,12 +1,28 @@
-from databaseManager import Student
+from databaseManager import Student,Class
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from datetime import datetime
 
 
 # Excelファイルからデータを読み込む
 excel_file = 'sutudentData.xlsx'
-df = pd.read_excel(excel_file)
+df = pd.read_excel(excel_file,sheet_name='student',
+                  dtype= {'last_name':'str',
+                          'first_name':'str',
+                          'last_name_katakana':'str',
+                          'first_name_katakana':'str',
+                          'birthday':'object',
+                          'gender':'str',
+                          'email':'str',
+                          'phone':'str',
+                          'mobile_phone':'str',
+                          'postal_code':'str',
+                          'address':'str',
+                          'class_id':'str',
+                          'status':'str',
+                          }
+                  )
 
 # データベース接続の設定
 engine = create_engine('sqlite:///school.db')
@@ -33,10 +49,32 @@ for index, row in df.iterrows():
     )
     session.add(student)
 
-
 session.commit()
 session.close()
 
 
 
+excel_file = 'sutudentData.xlsx'
+df = pd.read_excel(excel_file,sheet_name='class',
+                  dtype= {'class_number':'str',
+                          'class_name':'str',
+                          'classroom_id':'str',
+                          })
+
+
+engine = create_engine('sqlite:///school.db')
+Session = sessionmaker(bind=engine)
+session = Session()
+
+
+for index, row in df.iterrows():
+    classes = Class(
+        class_number=row['class_number'],
+        class_name=row['class_name'],
+        classroom_id=row['classroom_id'],
+    )
+    session.add(classes)
+
+session.commit()
+session.close()
 
