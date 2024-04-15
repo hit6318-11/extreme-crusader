@@ -64,36 +64,44 @@ def create_student():
 # 生徒情報の取得を行うエンドポイント
 @app.route('/api/students', methods=['GET'])
 def get_students():
-    # リクエストからクエリパラメータを辞書形式で取得する
+    # リクエストからクエリパラメータを辞書として取得
     query_parameters = request.args.to_dict()
 
-    # 全ての生徒を取得するためのベースクエリを初期化する
+    # すべての生徒を取得する基本クエリを初期化
     base_query = db_session.query(Student)
 
-    # OR 条件のリストを初期化する
+    # OR条件を格納するためのリストを初期化
     or_conditions = []
 
-    # クエリパラメータを繰り返し処理し、各属性に対するフィルタリング条件を動的に構築する
+    # クエリパラメータごとに反復処理し、各属性に対するフィルタリング条件を動的に構築
     for attr, value in query_parameters.items():
-        # 各属性に対するフィルタリング条件を動的に構築する
-        # 簡単のため、すべての属性が文字列型であると仮定する
+        # 各属性に対するフィルタリング条件を動的に構築
+        # 簡単のため、すべての属性を文字列型と仮定する
         column = getattr(Student, attr)
         or_conditions.append(column.ilike(f'%{value}%'))
 
-    # OR 条件を結合してフィルタリング条件を作成する
+    # OR条件を結合してフィルタリング条件を作成
     filter_condition = or_(*or_conditions)
 
-    # フィルタリング条件をベースクエリに適用する
-    students = base_query.filter(filter_condition).all()
+    # ベースクエリにフィルタリング条件を適用
+    students = base_query.filter(filter_condition)
 
-    # 生徒データをJSON形式に整形して返す
+    # クエリパラメータから取得したオーダリング基準に基づいて、オーダリング条件を動的に適用
+    order_by = request.args.get('order_by', 'id')  # デフォルトはIDでオーダリング
+    ascending = request.args.get('ascending', 'true').lower() == 'true'
+    order_expr = getattr(Student, order_by)
+    if not ascending:
+        order_expr = order_expr.desc()
+    students = students.order_by(order_expr).all()
+
+    # 生徒データをJSON形式でフォーマットして返す
     return jsonify([{
         'id': student.id,
         'first_name': student.first_name,
         'last_name': student.last_name,
         'last_name_katakana': student.last_name_katakana,
         'first_name_katakana': student.first_name_katakana,
-        'birthday': student.birthday.isoformat(),  
+        'birthday': student.birthday,
         'gender': student.gender,
         'email': student.email,
         'phone': student.phone,
