@@ -34,7 +34,7 @@ new Vue({
         confirmAndSubmit() {
             if (confirm('変更しますか？')) {
                 // 送信処理
-                window.location.href = 'result.html';
+                window.location.href = 'confirm.html';
             }
         },
         logout() {
