@@ -10,15 +10,15 @@ class Student(Base):
     first_name = Column(String(64), nullable=False)
     last_name_katakana = Column(String(64), nullable=False)
     first_name_katakana = Column(String(64), nullable=False)
-    birthday = Column(String(10), nullable=False) # data型から文字列型に変更
-    gender = Column(String(8), nullable=False) #intからstrに変更
+    birthday = Column(Date, nullable=False) # data型へ戻した
+    gender = Column(Integer, nullable=False) #intへ変更
     email = Column(String(128), nullable=False)
-    phone = Column(Integer, nullable=False)
-    mobile_phone = Column(Integer, nullable=False)
-    postal_code = Column(Integer, nullable=False)
+    phone = Column(String(21), nullable=False) #intからstrへ変更
+    mobile_phone = Column(String(15), nullable=False)
+    postal_code = Column(String(23), nullable=False)
     address = Column(String(256), nullable=False)
     class_id = Column(Integer, ForeignKey('classes.id'), nullable=False)
-    status = Column(String(7), nullable=False) #intからstrに変更
+    status = Column(Integer, nullable=False) 
     # Relation to Class
     class_ = relationship("Class", back_populates="students")
 
