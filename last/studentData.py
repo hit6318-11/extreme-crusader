@@ -8,21 +8,21 @@ from datetime import datetime
 # Excelファイルからデータを読み込む
 excel_file = 'sutudentData.xlsx'
 df = pd.read_excel(excel_file,sheet_name='student',
-                  dtype= {'last_name':'str',
-                          'first_name':'str',
-                          'last_name_katakana':'str',
-                          'first_name_katakana':'str',
-                          'birthday':'object',
-                          'gender':'str',
-                          'email':'str',
-                          'phone':'str',
-                          'mobile_phone':'str',
-                          'postal_code':'str',
-                          'address':'str',
-                          'class_id':'str',
-                          'status':'str',
-                          }
-                  )
+                dtype= {'last_name':'str',
+                        'first_name':'str',
+                        'last_name_katakana':'str',
+                        'first_name_katakana':'str',
+                        'birthday':'object',
+                        'gender':'int',
+                        'email':'str',
+                        'phone':'str',
+                        'mobile_phone':'str',
+                        'postal_code':'str',
+                        'address':'str',
+                        'class_id':'int',
+                        'status':'int',
+                        }
+                )
 
 # データベース接続の設定
 engine = create_engine('sqlite:///school.db')
@@ -56,10 +56,10 @@ session.close()
 
 excel_file = 'sutudentData.xlsx'
 df = pd.read_excel(excel_file,sheet_name='class',
-                  dtype= {'class_number':'str',
-                          'class_name':'str',
-                          'classroom_id':'str',
-                          })
+                dtype= {'class_number':'str',
+                        'class_name':'str',
+                        'classroom_id':'str',
+                        })
 
 
 engine = create_engine('sqlite:///school.db')
