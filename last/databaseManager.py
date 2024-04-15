@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship, sessionmaker
 Base = declarative_base()
 class Student(Base):
     __tablename__ = 'students'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     last_name = Column(String(64), nullable=False)
     first_name = Column(String(64), nullable=False)
     last_name_katakana = Column(String(64), nullable=False)
@@ -24,7 +24,7 @@ class Student(Base):
 
 class Class(Base):
     __tablename__ = 'classes'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     class_number = Column(String(6), nullable=False)
     class_name = Column(String(64), nullable=False)
     classroom_id = Column(String(64), ForeignKey('classrooms.id'), nullable=False)
@@ -34,13 +34,13 @@ class Class(Base):
 
 class User(Base):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(String(256), nullable=False)
     password = Column(String(256), nullable=False)
 
 class Classroom(Base):
     __tablename__ = 'classrooms'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     classroom_name = Column(String(256), nullable=False)
     # Relation to Class
     classes = relationship("Class", back_populates="classroom")
