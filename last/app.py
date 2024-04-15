@@ -53,7 +53,7 @@ def form():
 
 
 # 生徒情報の作成を行うエンドポイント
-@app.route('/students', methods=['POST'])
+@app.route('/api/students', methods=['POST'])
 def create_student():
     data = request.json  # リクエストボディからJSONデータを取得
     student = Student(**data)  # Studentインスタンスを作成
@@ -66,6 +66,10 @@ def create_student():
 def get_students():
     # リクエストからクエリパラメータを辞書として取得
     query_parameters = request.args.to_dict()
+
+    # クエリパラメータからオーダリング基準を抽出
+    order_by = query_parameters.pop('order_by', 'id')  # 指定されていない場合はIDでデフォルトオーダリング
+    ascending = query_parameters.pop('ascending', 'true').lower() == 'true'
 
     # すべての生徒を取得する基本クエリを初期化
     base_query = db_session.query(Student)
@@ -87,11 +91,11 @@ def get_students():
     students = base_query.filter(filter_condition)
 
     # クエリパラメータから取得したオーダリング基準に基づいて、オーダリング条件を動的に適用
-    order_by = request.args.get('order_by', 'id')  # デフォルトはIDでオーダリング
-    ascending = request.args.get('ascending', 'true').lower() == 'true'
     order_expr = getattr(Student, order_by)
     if not ascending:
         order_expr = order_expr.desc()
+
+    # データベースからオプションのオーダリングを適用して生徒を取得
     students = students.order_by(order_expr).all()
 
     # 生徒データをJSON形式でフォーマットして返す
@@ -101,7 +105,7 @@ def get_students():
         'last_name': student.last_name,
         'last_name_katakana': student.last_name_katakana,
         'first_name_katakana': student.first_name_katakana,
-        'birthday': student.birthday,
+        'birthday': student.birthday.isoformat(),  
         'gender': student.gender,
         'email': student.email,
         'phone': student.phone,
@@ -113,7 +117,7 @@ def get_students():
     } for student in students])
 
 # 生徒情報の更新を行うエンドポイント
-@app.route('/students/<int:student_id>', methods=['PUT'])
+@app.route('/api/students/<int:student_id>', methods=['PUT'])
 def update_student(student_id):
     data = request.json  # リクエストボディからJSONデータを取得
     student = db_session.query(Student).filter(Student.id == student_id).first()  # 更新対象の生徒を検索
@@ -125,9 +129,10 @@ def update_student(student_id):
     return jsonify(success=False), 404  # 生徒が見つからない場合は404エラー
 
 # 生徒情報の削除を行うエンドポイント
-@app.route('/students/<int:student_id>', methods=['DELETE'])
+@app.route('/api/students/<int:student_id>', methods=['DELETE'])
 def delete_student(student_id):
-    student = db_session.query(Student).filter(Student.id == student_id).first()  # 削除対象の生徒を検索
+    student_int_id = int(student_id)
+    student = db_session.query(Student).filter(Student.id == student_int_id).first()  # 削除対象の生徒を検索
     if student:
         db_session.delete(student)  # セッションから削除
         db_session.commit()  # データベースにコミット
