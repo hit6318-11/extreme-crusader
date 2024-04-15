@@ -25,7 +25,7 @@ df = pd.read_excel(excel_file,sheet_name='student',
                 )
 
 # データベース接続の設定
-engine = create_engine('sqlite:///school.db')
+engine = create_engine('sqlite:///db/school.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -62,7 +62,7 @@ df = pd.read_excel(excel_file,sheet_name='class',
                         })
 
 
-engine = create_engine('sqlite:///school.db')
+engine = create_engine('sqlite:///db/school.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
