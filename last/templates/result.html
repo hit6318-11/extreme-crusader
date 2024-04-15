@@ -15,7 +15,7 @@
         </header>
         <button @click="goBack">検索へ戻る</button>
         <div class="search-results">
-            <button @click="confirmDelete">削除</button>
+            <!-- <button @click="confirmDelete">削除</button> -->
             <button @click="editStudent(student.id)">編集</button>
             <table>
                 <thead>
@@ -26,13 +26,15 @@
                         <th>クラス</th>
                     </tr>
                 </thead>
+                {% raw %}
                 <tbody>
                     <tr v-for="student in students" :key="student.id">
-                        <td><button v-on:click="toggleSort('id')" v-on:dblclick="toggleSort('id', true)">{{ student.id }}</button></td>
-                        <td><button v-on:click="toggleSort('name')" v-on:dblclick="toggleSort('name', true)">{{ student.name }}</button></td>
-                        <td><button v-on:click="toggleSort('class')" v-on:dblclick="toggleSort('class', true)">{{ student.class }}</button></td>
+                        <td><button @click="toggleSort('id')" @dblclick="toggleSort('id', true)">{{ student.id }}</button></td>
+                        <td><button @click="toggleSort('name')" @dblclick="toggleSort('name', true)">{{ student.name }}</button></td>
+                        <td><button @click="toggleSort('class')" @dblclick="toggleSort('class', true)">{{ student.class }}</button></td>
                     </tr>
                 </tbody>
+                {% endraw %}
             </table>
         </div>
     </div>

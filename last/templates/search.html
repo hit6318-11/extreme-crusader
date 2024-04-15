@@ -12,25 +12,25 @@
     <select id="search_category">
         <option value="all" selected>すべて</option>
         <option value="id">ID</option>
-        <option value="name">姓名<option value="id">ID</option></option>
-        <option value="kana_name">姓名(カタカナ)</option>
-        <option value="birthdate">生年月日</option>
+        <option value="last_name">姓</option>
+        <option value="first_name">名</option>
+        <option value="last_name_katakana">姓(カタカナ)</option>
+        <option value="first_name_katakana">名(カタカナ)</option>
+        <option value="birthday">生年月日</option>
         <option value="gender">性別</option>
         <option value="email">メールアドレス</option>
         <option value="phone">電話番号</option>
+        <option value="mobile_phone">携帯電話番号</option>
         <option value="postal_code">郵便番号</option>
         <option value="address">住所</option>
-        <option value="class">クラス</option>
-        <option value="completed">修了</option>
-        <option value="course_name">コース名</option>
-        <option value="classroom">教室</option>
+        <option value="class_id">クラス</option>
+        <option value="status">修了</option>
+        <!-- <option value="course_name">コース名</option>
+        <option value="classroom">教室</option> -->
     </select>
     <input type="text" id="search_term" placeholder="Search...">
     <button onclick="search()">Search</button>
     <div id="results"></div>
-    <script>
-        let test = {{url_for}}
-    </script>
     <script src="../static/js/search.js"></script>
 </body>
 </html>

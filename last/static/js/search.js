@@ -1,18 +1,19 @@
 function search() {
     var searchCategory = document.getElementById('search_category').value;
     var searchTerm = document.getElementById('search_term').value;
-    
-    fetch('/students', {
+    var url = `/api/students?${encodeURIComponent(searchCategory)}=${encodeURIComponent(searchTerm)}`;
+    fetch(url, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `search_category=${searchCategory}&search_term=${searchTerm}`
+            'Content-Type': 'application/json',
+        }
     })
     .then(response => response.json())
     .then(data => {
-        sessionStorage.setItem('searchResults', JSON.stringify(data)); // 検索結果をセッションストレージに保存
-        window.location.href = '../templates/result.html'; // result.htmlへリダイレクト
-        
-        });
+        sessionStorage.setItem('searchResults', JSON.stringify(data));
+        window.location.href = '/result';
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
 }

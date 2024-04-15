@@ -48,13 +48,13 @@ new Vue({
             });
         },
         editStudent(studentId) {
-            window.location.href = `../templates/form.html?studentId=${studentId}`;
+            window.location.href = `/form?id=${studentId}`;
         },
         goBack() {
-            window.location.href = '../templates/search.html';
+            window.location.href = '/search';
         },
         logout() {
-            window.location.href = '../templates/login.html';
+            window.location.href = '/login';
         }
     },
     mounted() {
