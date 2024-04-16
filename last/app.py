@@ -87,7 +87,7 @@ def get_students():
     # 結果をJSON形式で整形して返す
     results = [{
         'id': student.id,
-        'name': f'{student.first_name} {student.last_name}',
+        'name': f'{student.last_name} {student.first_name}',
         'class_id': student.class_id
     } for student in students]
     return jsonify(results)
