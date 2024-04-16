@@ -3,7 +3,6 @@ from flask import Flask, request, jsonify, session, render_template, request, ur
 from sqlalchemy import or_
 from sqlalchemy.orm import scoped_session, sessionmaker
 from databaseManager import Base, Student, User, engine  # エンジンのインポート
-import pprint
 
 app = Flask(__name__)
 
@@ -44,6 +43,11 @@ def form():
     ]
     # class_optionsをテンプレートに渡す
     return render_template("form.html", classOptions=class_options)
+
+@app.route('/confirm')
+def cconfirm():
+    return render_template("confirm.html")
+
 
 #@app.route('/form')
 #def form():
