@@ -15,25 +15,27 @@
         </header>
         <button @click="goBack">検索へ戻る</button>
         <div class="search-results">
-            <!-- <button @click="confirmDelete">削除</button> -->
-            <button @click="editStudent(student.id)">編集</button>
             <table>
                 <thead>
                     <tr>
-                        <th>チェック</th>
-                        <th>ID</th>
-                        <th>名前</th>
-                        <th>クラス</th>
+                        <th><input type="checkbox" id="checkAll" @change="toggleAllCheckboxes" /></th>
+                        <th><button @click="toggleSort('id')" @dblclick="toggleSort('id', true)">ID</button></th>
+                        <th><button @click="toggleSort('name')" @dblclick="toggleSort('name', true)">名前</button></th>
+                        <th><button @click="toggleSort('class')" @dblclick="toggleSort('class', true)">クラス</button></th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 {% raw %}
                 <tbody>
                     <tr v-for="student in students" :key="student.id">
-                        <td><button @click="toggleSort('id')" @dblclick="toggleSort('id', true)">{{ student.id }}</button></td>
-                        <td><button @click="toggleSort('name')" @dblclick="toggleSort('name', true)">{{ student.name }}</button></td>
-                        <td><button @click="toggleSort('class')" @dblclick="toggleSort('class', true)">{{ student.class }}</button></td>
+                        <td><input type="checkbox" :value="student.id" v-model="selectedStudents" /></td>
+                        <td>{{ student.id }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.class }}</td>
+                        <td><button @click="editStudent(student.id)">編集</button></td>
                     </tr>
                 </tbody>
+                
                 {% endraw %}
             </table>
         </div>

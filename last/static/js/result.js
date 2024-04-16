@@ -2,9 +2,10 @@ new Vue({
     el: '#app',
     data: {
         username: 'ユーザー名',
-        students: [],
-        currentSortField: null, // 現在のソートフィールド
-        isAscending: true // 昇順かどうか
+        students: [],  // 検索結果で得られた学生のリスト
+        selectedStudents: [],  // チェックボックスで選択された学生のIDのリスト
+        currentSortField: null,
+        isAscending: true
     },
     methods: {
         fetchResults() {
@@ -16,37 +17,6 @@ new Vue({
                 console.log('No search results found.');
             }
         },
-        toggleSort(field) {
-            if (this.currentSortField === field) {
-                // 同じフィールドが再度クリックされた場合は、昇順/降順を切り替える
-                this.isAscending = !this.isAscending;
-            } else {
-                // 新しいフィールドでソートする場合は、デフォルトで昇順に設定
-                this.isAscending = true;
-                this.currentSortField = field;
-            }
-            this.sortStudents();
-        },
-        sortStudents() {
-            this.students.sort((a, b) => {
-                let compareA = a[this.currentSortField];
-                let compareB = b[this.currentSortField];
-                
-                // 文字列の場合は大文字、小文字を無視する
-                if (typeof compareA === 'string') {
-                    compareA = compareA.toLowerCase();
-                    compareB = compareB.toLowerCase();
-                }
-
-                if (compareA < compareB) {
-                    return this.isAscending ? -1 : 1;
-                } else if (compareA > compareB) {
-                    return this.isAscending ? 1 : -1;
-                } else {
-                    return 0;
-                }
-            });
-        },
         editStudent(studentId) {
             window.location.href = `/form?id=${studentId}`;
         },
@@ -55,6 +25,28 @@ new Vue({
         },
         logout() {
             window.location.href = '/login';
+        },
+        toggleSort(field, ascending = false) {
+            this.currentSortField = field;
+            this.isAscending = ascending;
+            this.sortStudents();
+        },
+        sortStudents() {
+            this.students.sort((a, b) => {
+                let valueA = this.normalizeValue(a[this.currentSortField]);
+                let valueB = this.normalizeValue(b[this.currentSortField]);
+                return (valueA < valueB) ? (this.isAscending ? -1 : 1) : (valueA > valueB) ? (this.isAscending ? 1 : -1) : 0;
+            });
+        },
+        normalizeValue(value) {
+            return typeof value === 'string' ? value.toLowerCase() : value;
+        },
+        toggleAllCheckboxes(event) {
+            if (event.target.checked) {
+                this.selectedStudents = this.students.map(student => student.id);
+            } else {
+                this.selectedStudents = [];
+            }
         }
     },
     mounted() {
