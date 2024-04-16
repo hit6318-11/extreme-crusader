@@ -17,3 +17,9 @@ function search() {
         console.error('Error fetching data:', error);
     });
 }
+
+
+
+function register() {
+    window.location.href = '/form';
+}
