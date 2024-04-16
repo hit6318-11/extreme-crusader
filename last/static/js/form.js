@@ -1,8 +1,7 @@
-
 new Vue({
     el: '#app',
     data: {
-        username: 'ユーザー名', // ログイン時に設定されるべき値
+        username: 'ユーザー名',
         student: {
             id: '',
             lastName: '',
@@ -18,28 +17,24 @@ new Vue({
             address: '',
             classId: '',
         },
-        classOptions: [
-            { text: '7744', value: '1' },
-            { text: '8843', value: '2' },
-            // その他のクラスオプション
-        ],
+        classOptions: [] // This will be populated by Flask
     },
     methods: {
         confirmDelete() {
             if (confirm('本当に削除してよろしいですか？')) {
                 // 削除処理
-                window.location.href = 'confirm.html';
+                window.location.href = '/confirm';
             }
         },
         confirmAndSubmit() {
             if (confirm('変更しますか？')) {
                 // 送信処理
-                window.location.href = 'confirm.html';
+                window.location.href = '/confirm';
             }
         },
         logout() {
             // ログアウト処理
-            window.location.href = 'login.html';
+            window.location.href = '/confirm';
         },
     },
 });

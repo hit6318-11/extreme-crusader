@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../static/css/form.css">
 </head>
 <body>
+{% raw %}
 <div id="app">
     <header>
         <span>{{ username }}</span>
@@ -69,7 +70,7 @@
                 <div>
                     <label for="classId">クラス:</label>
                     <select id="classId" v-model="student.classId">
-                        <option v-for="option in classOptions" :value="option.value">{{ option.text }}</option>
+                        <option v-for="selection in classOptions" :value="selection.value">{{ selection.text }}</option>
                     </select>
                 </div>
                 <button type="submit">送信</button>
@@ -77,6 +78,7 @@
         </div>
     </section>
 </div>
+{% endraw %}
 <script src="../static/js/form.js"></script>
 </body>
 </html>
