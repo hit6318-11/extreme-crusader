@@ -58,23 +58,6 @@ def create_student():
     db_session.commit()
     return jsonify(student.id), 201
 
-# 学生の取得エンドポイント
-#@app.route('/api/students', methods=['GET'])
-#def get_students():
-#    query_parameters = request.args.to_dict()
-#   order_by = query_parameters.pop('order_by', 'id')
-#   ascending = query_parameters.pop('ascending', 'true').lower() == 'true'
-#    base_query = db_session.query(Student)
-#    or_conditions = []
-#    for attr, value in query_parameters.items():
-#        column = getattr(Student, attr)
-#        or_conditions.append(column.ilike(f'%{value}%'))
-#    filter_condition = or_(*or_conditions)
-#    students = base_query.filter(filter_condition)
-#    order_expr = getattr(Student, order_by)
-#    if not ascending:
-#        order_expr = order_expr.desc()
-#    students = students.order_by(order_expr).all()
 
 @app.route('/api/students', methods=['GET'])
 def get_students():
