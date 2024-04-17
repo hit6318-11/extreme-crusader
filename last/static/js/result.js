@@ -26,7 +26,7 @@ new Vue({
             window.location.href = '/search';
         },
         logout() {
-            window.location.href = '/login';
+            window.location.href = '/logout';
         },
         toggleSort(field, ascending = false) {
             if (this.currentSortField === field) {

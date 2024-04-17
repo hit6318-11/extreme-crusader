@@ -31,11 +31,11 @@ class Course(Base):
     students = relationship("Student", back_populates="course_")
     classroom = relationship("Classroom", back_populates="courses")
 
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(String(256), nullable=False)
-    password = Column(String(256), nullable=False)
+# class User(Base):
+#     __tablename__ = 'users'
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     email = Column(String(256), nullable=False)
+#     password = Column(String(256), nullable=False)
 
 class Classroom(Base):
     __tablename__ = 'classrooms'

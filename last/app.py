@@ -3,9 +3,12 @@ from flask import Flask, request, jsonify, session, render_template, request, ur
 from sqlalchemy import or_
 from datetime import datetime
 from sqlalchemy.orm import scoped_session, sessionmaker, joinedload
-from databaseManager import Base, Student, User, Course, engine  # エンジンのインポート
+from databaseManager import Base, Student, Course, engine  # エンジンのインポート
+from hash import User
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
 
 # エンジンをベースクラスのメタデータにバインドします
 Base.metadata.bind = engine
@@ -13,35 +16,76 @@ Base.metadata.bind = engine
 # スレッドセーフティを確保するためのスコープ付きセッションファクトリを作成します
 db_session = scoped_session(sessionmaker(bind=engine))
 
+def is_logged_in():
+    return 'username' in session
+
 # サイトのルーティング
 @app.route('/')
 def index():
+    if not is_logged_in():
+        return redirect(url_for('login'))
+    else:
+        username = session.get('username')
+    return render_template("search.html", username=username)
+
+# Login Route
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user = db_session.query(User).filter(User.username == username).first()
+        if user and user.check_password(password):
+            session['username'] = user.username
+            return redirect(url_for('search'))
+        else:
+            return render_template("login.html", error="Invalid credentials. Please try again.")
     return render_template("login.html")
 
-@app.route('/login', methods=["POST", "GET"])
-def login():
-    return render_template("login.html")
+# Logout Route
+@app.route('/logout')
+def logout():
+    if not is_logged_in():
+        return redirect(url_for('login'))
+    else:
+        session.clear()
+    return redirect(url_for('login'))
 
 @app.route('/search')
 def search():
-    return render_template("search.html")
+    if not is_logged_in():
+        return redirect(url_for('login'))
+    else:
+        username = session.get('username')
+    return render_template("search.html", username=username)
 
 @app.route('/result')
 def result():
+    if not is_logged_in():
+        return redirect(url_for('login'))
+    else:
+        username = session.get('username')
     # セッションストレージから学生データを取得します
-    student_data = json.loads(session.get('searchResults', '[]'))
-
+        student_data = json.loads(session.get('searchResults', '[]'))
     # 学生データをコンテキスト変数としてテンプレートに渡します
-    return render_template("result.html", students_data=student_data)
+    return render_template("result.html", students_data=student_data, username=username)
 
 @app.route('/form')
 def form():
-    return render_template("form.html")
+    if not is_logged_in():
+        return redirect(url_for('login'))
+    else:
+        username = session.get('username')
+    return render_template("form.html", username=username)
 
 
 @app.route('/confirm')
 def confirm():
-    return render_template("confirm.html")
+    if not is_logged_in():
+        return redirect(url_for('login'))
+    else:
+        username = session.get('username')
+    return render_template("confirm.html", username=username)
 
 
 # 学生エンドポイントの作成

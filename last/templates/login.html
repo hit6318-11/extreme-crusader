@@ -8,10 +8,7 @@
 </head>
 <body>
     <div id="app">
-        <form @submit.prevent="login">
-            <!-- <div>
-                <button type="button" @click="register">新規登録</button>
-            </div> -->
+        <form @submit.prevent="login" method="post">
             <div>
                 <label for="username">Username:</label>
                 <input type="text" id="username" v-model="credentials.username" required>

@@ -144,9 +144,8 @@ new Vue({
             }
         },
         logout() {
-            // ログアウト処理
-            window.location.href = '/confirm';
-        },
+            window.location.href = '/logout';
+        }
     },
     mounted() {
         this.getClasses();

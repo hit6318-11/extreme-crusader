@@ -10,23 +10,32 @@ new Vue({
     },
     methods: {
         login: function() {
-            axios.post('/api/authenticate', this.credentials)
-                .then(response => {
-                    // 認証成功時の処理
-                    console.log('Authentication successful!', response.data);
-                    
-                    // Vue Routerを使用せずにダッシュボードページへリダイレクト
-                    window.location.href = '/search.html'; // ダッシュボードページのURLに変更してください
-                })
-                .catch(error => {
-                    // 認証失敗時の処理
+            // Construct the form data to be sent to the server-side route
+            const formData = new FormData();
+            formData.append('username', this.credentials.username);
+            formData.append('password', this.credentials.password);
+
+            // Send a POST request to the server-side route for authentication
+            fetch('/login', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Redirect to the search page upon successful login
+                    window.location.href = '/search';
+                } else {
+                    // Handle authentication failure
                     this.loginError = true;
-                    console.error('Authentication failed', error);
-                });
+                }
+            })
+            .catch(error => {
+                console.error('Error occurred during login:', error);
+            });
         },
         register: function() {
-            // ユーザー登録画面へリダイレクト
-            window.location.href = '../../templates/register.html'; // ユーザー登録画面のURLに適宜変更してください
+            // Redirect to the user registration page
+            window.location.href = '/register';
         }
     }
 });
