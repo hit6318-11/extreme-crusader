@@ -19,6 +19,7 @@ new Vue({
             }
         },
         editStudent(studentId) {
+            // sessionStorage.setItem('searchResults', JSON.stringify(this.students))
             window.location.href = `/form?id=${studentId}`;
         },
         goBack() {
@@ -28,8 +29,12 @@ new Vue({
             window.location.href = '/login';
         },
         toggleSort(field, ascending = false) {
-            this.currentSortField = field;
-            this.isAscending = ascending;
+            if (this.currentSortField === field) {
+                this.isAscending = !this.isAscending; // Toggle sort direction if clicking on the same field
+            } else {
+                this.currentSortField = field; // Change current sort field if clicking on a different field
+                this.isAscending = true; // Reset sort direction to ascending
+            }
             this.sortStudents();
         },
         sortStudents() {
