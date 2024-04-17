@@ -62,10 +62,10 @@ def get_students():
     query_parameters = request.args.to_dict()  # クエリパラメータを辞書として取得
     order_by = query_parameters.pop('order_by', 'id')  # ソート基準のパラメータ
     ascending = query_parameters.pop('ascending', 'true').lower() == 'true'  # 昇順か降順か
-
+    print('this is param', query_parameters)
     if 'all' in query_parameters:  # 'all'パラメータが含まれる場合
         students = db_session.query(Student).all()  # 全ての学生を取得
-    elif 'id' in query_parameters:
+    elif 'id' in query_parameters and query_parameters['id']:
         studentId = int(query_parameters['id'])
         student = db_session.query(Student).filter(Student.id == studentId).first()
         result = [{
