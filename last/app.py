@@ -63,51 +63,39 @@ def get_students():
     order_by = query_parameters.pop('order_by', 'id')  # ソート基準のパラメータ
     ascending = query_parameters.pop('ascending', 'true').lower() == 'true'  # 昇順か降順か
     print('this is param', query_parameters)
-    if 'all' in query_parameters:  # 'all'パラメータが含まれる場合
-        students = db_session.query(Student).all()  # 全ての学生を取得
-    elif 'id' in query_parameters and query_parameters['id']:
+
+    base_query = db_session.query(Student)  # 学生テーブルからクエリを開始
+
+    if 'id' in query_parameters and query_parameters['id']:
         studentId = int(query_parameters['id'])
-        student = db_session.query(Student).filter(Student.id == studentId).first()
-        result = [{
-            'id': student.id,
-            'name': f'{student.last_name} {student.first_name}',
-            'lastName': student.last_name,
-            'firstName': student.first_name,
-            'lastNameKana': student.last_name_katakana,
-            'firstNameKana': student.first_name_katakana,
-            'birthday': student.birthday,
-            'gender': student.gender,
-            'email': student.email,
-            'phone': student.phone,
-            'mobilePhone': student.mobile_phone,
-            'postalCode': student.postal_code,
-            'address': student.address,
-            'classId': student.course_id,
-            'course_number': student.course_.number,
-            'course_name': student.course_.name,
-            'course_id': student.course_id,
-            'status': student.status
-        }]
-        return jsonify(result)
-    else:
-        base_query = db_session.query(Student)  # 学生テーブルからクエリを開始
-        or_conditions = []
-        for attr, value in query_parameters.items():
-            if hasattr(Student, attr):  # 学生クラスに属性が存在するかチェック
-                column = getattr(Student, attr)  # 属性に対応するカラムオブジェクトを取得
-                or_conditions.append(column.ilike(f'%{value}%'))  # 部分一致検索を設定
+        student = base_query.filter(Student.id == studentId).first()
+        if student:
+            return jsonify([build_student_json(student)])
+        else:
+            return jsonify([])  # 学生が見つからない場合は空のリストを返す
 
-        if or_conditions:
-            base_query = base_query.filter(or_(*or_conditions))  # 複数条件のORを適用
+    or_conditions = []
+    for attr, value in query_parameters.items():
+        if hasattr(Student, attr):  # 学生クラスに属性が存在するかチェック
+            column = getattr(Student, attr)  # 属性に対応するカラムオブジェクトを取得
+            or_conditions.append(column.ilike(f'%{value}%'))  # 部分一致検索を設定
 
-        # ソート処理
-        order_expr = getattr(Student, order_by)
-        if not ascending:
-            order_expr = order_expr.desc()
-        students = base_query.order_by(order_expr).all()  # クエリ実行
+    if or_conditions:
+        base_query = base_query.filter(or_(*or_conditions))  # 複数条件のORを適用
+
+    # ソート処理
+    order_expr = getattr(Student, order_by)
+    if not ascending:
+        order_expr = order_expr.desc()
+    students = base_query.order_by(order_expr).all()  # クエリ実行
 
     # 結果をJSON形式で整形して返す
-    results = [{
+    results = [build_student_json(student) for student in students]
+    return jsonify(results)
+
+
+def build_student_json(student):
+    return {
         'id': student.id,
         'name': f'{student.last_name} {student.first_name}',
         'lastName': student.last_name,
@@ -126,8 +114,7 @@ def get_students():
         'course_number': student.course_.number,
         'course_name': student.course_.name,
         'status': student.status
-    } for student in students]
-    return jsonify(results)
+    }
 
 
 
