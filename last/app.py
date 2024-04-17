@@ -3,17 +3,16 @@ from flask import Flask, request, jsonify, session, render_template, request, ur
 from sqlalchemy import or_
 from datetime import datetime
 from sqlalchemy.orm import scoped_session, sessionmaker, joinedload
-from databaseManager import Base, Student, Course, engine  # エンジンのインポート
-from hash import User
+from databaseManager import Base, Student, Course, engine  # データベースエンジンのインポート
+from hash import User  # ユーザーハッシュのインポート
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-
-# エンジンをベースクラスのメタデータにバインドします
+# データベースエンジンをベースクラスのメタデータにバインド
 Base.metadata.bind = engine
 
-# スレッドセーフティを確保するためのスコープ付きセッションファクトリを作成します
+# スレッドセーフなセッションファクトリを作成
 db_session = scoped_session(sessionmaker(bind=engine))
 
 def is_logged_in():
@@ -28,7 +27,7 @@ def index():
         username = session.get('username')
     return render_template("search.html", username=username)
 
-# Login Route
+# ログインルート
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -39,10 +38,10 @@ def login():
             session['username'] = user.username
             return redirect(url_for('search'))
         else:
-            return render_template("login.html", error="Invalid credentials. Please try again.")
+            return render_template("login.html", error="無効な資格情報です。もう一度お試しください。")
     return render_template("login.html")
 
-# Logout Route
+# ログアウトルート
 @app.route('/logout')
 def logout():
     if not is_logged_in():
@@ -65,9 +64,9 @@ def result():
         return redirect(url_for('login'))
     else:
         username = session.get('username')
-    # セッションストレージから学生データを取得します
-        student_data = json.loads(session.get('searchResults', '[]'))
-    # 学生データをコンテキスト変数としてテンプレートに渡します
+    # セッションストレージから学生データを取得
+    student_data = json.loads(session.get('searchResults', '[]'))
+    # 学生データをテンプレートに渡す
     return render_template("result.html", students_data=student_data, username=username)
 
 @app.route('/form')
@@ -78,7 +77,6 @@ def form():
         username = session.get('username')
     return render_template("form.html", username=username)
 
-
 @app.route('/confirm')
 def confirm():
     if not is_logged_in():
@@ -87,12 +85,11 @@ def confirm():
         username = session.get('username')
     return render_template("confirm.html", username=username)
 
-
 # 学生エンドポイントの作成
 @app.route('/api/students', methods=['POST'])
 def create_student():
     data = request.json
-    # Convert birthday string to Python date object
+    # 誕生日の文字列をPythonの日付オブジェクトに変換
     if 'birthday' in data:
         data['birthday'] = datetime.strptime(data['birthday'], '%Y-%m-%d').date()
     student = Student(**data)
@@ -100,13 +97,11 @@ def create_student():
     db_session.commit()
     return jsonify(student.id), 201
 
-
 @app.route('/api/students', methods=['GET'])
 def get_students():
     query_parameters = request.args.to_dict()  # クエリパラメータを辞書として取得
     order_by = query_parameters.pop('order_by', 'id')  # ソート基準のパラメータ
     ascending = query_parameters.pop('ascending', 'true').lower() == 'true'  # 昇順か降順か
-    print('this is param', query_parameters)
 
     base_query = db_session.query(Student)  # 学生テーブルからクエリを開始
 
@@ -137,7 +132,6 @@ def get_students():
     results = [build_student_json(student) for student in students]
     return jsonify(results)
 
-
 def build_student_json(student):
     return {
         'id': student.id,
@@ -159,8 +153,6 @@ def build_student_json(student):
         'course_name': student.course_.name,
         'status': student.status
     }
-
-
 
 # 学生の更新エンドポイント
 @app.route('/api/students/<int:student_id>', methods=['PUT'])
@@ -186,7 +178,6 @@ def delete_student(student_id):
         db_session.commit()
         return jsonify(success=True)
     return jsonify(success=False), 404
-
 
 @app.route('/api/courses', methods=['GET'])
 def get_courses():
@@ -227,8 +218,6 @@ def delete_course(course_id):
         return jsonify(success=True)
     return jsonify(success=False), 404
 
-
-
 @app.route('/api/users', methods=['GET'])
 def get_user():
     users = db_session.query(User).all()
@@ -266,8 +255,6 @@ def delete_user(user_id):
         db_session.commit()
         return jsonify(success=True)
     return jsonify(success=False), 404
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)

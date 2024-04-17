@@ -4,43 +4,40 @@ new Vue({
         username: 'ユーザー名',
         students: [],  // 検索結果で得られた学生のリスト
         selectedStudents: [],  // チェックボックスで選択された学生のIDのリスト
-        currentSortField: null,
-        isAscending: true,
-        noResult:false
+        currentSortField: null, // 現在のソートフィールド
+        isAscending: true, // 昇順フラグ
+        noResult:false // 検索結果がない場合のフラグ
     },
     methods: {
         fetchResults() {
             const results = sessionStorage.getItem('searchResults');
-            if (results.length < 3) {
-                this.noResult = true;
-                console.log('No search results found.');
+            if (results.length < 3) { // 検索結果がない場合
+                this.noResult = true; // フラグを立てる
+                console.log('検索結果が見つかりません。');
             } else {
-                console.log("this is result", results);
-                console.log("this is length", results.length)
-                this.noResult = false;
-                console.log(JSON.parse(results))
-                this.students = JSON.parse(results);
-                sessionStorage.removeItem('searchResults');
+                this.noResult = false; // フラグを解除する
+                this.students = JSON.parse(results); // 学生リストを取得
+                sessionStorage.removeItem('searchResults'); // セッションストレージから削除
             }
         },
         editStudent(studentId) {
             sessionStorage.setItem('searchResults', JSON.stringify(this.students))
-            window.location.href = `/form?id=${studentId}`;
+            window.location.href = `/form?id=${studentId}`; // 学生の編集ページにリダイレクト
         },
         goBack() {
-            window.location.href = '/search';
+            window.location.href = '/search'; // 検索ページに戻る
         },
         logout() {
-            window.location.href = '/logout';
+            window.location.href = '/logout'; // ログアウト
         },
         toggleSort(field, ascending = false) {
             if (this.currentSortField === field) {
-                this.isAscending = !this.isAscending; // Toggle sort direction if clicking on the same field
+                this.isAscending = !this.isAscending; // 同じフィールドをクリックした場合、ソート方向を切り替える
             } else {
-                this.currentSortField = field; // Change current sort field if clicking on a different field
-                this.isAscending = true; // Reset sort direction to ascending
+                this.currentSortField = field; // 異なるフィールドをクリックした場合、現在のソートフィールドを変更する
+                this.isAscending = true; // ソート方向を昇順にリセットする
             }
-            this.sortStudents();
+            this.sortStudents(); // 学生リストをソートする
         },
         sortStudents() {
             this.students.sort((a, b) => {
@@ -50,17 +47,17 @@ new Vue({
             });
         },
         normalizeValue(value) {
-            return typeof value === 'string' ? value.toLowerCase() : value;
+            return typeof value === 'string' ? value.toLowerCase() : value; // 値を正規化して返す
         },
         toggleAllCheckboxes(event) {
             if (event.target.checked) {
-                this.selectedStudents = this.students.map(student => student.id);
+                this.selectedStudents = this.students.map(student => student.id); // 全てのチェックボックスを選択する
             } else {
-                this.selectedStudents = [];
+                this.selectedStudents = []; // 選択を解除する
             }
         }
     },
     mounted() {
-        this.fetchResults();
+        this.fetchResults(); // マウント時に検索結果を取得する
     }
 });

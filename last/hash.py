@@ -9,6 +9,7 @@ Base = declarative_base()
 
 # ユーザーモデルの定義
 class User(Base):
+    """ユーザーテーブルのORMクラス"""
     __tablename__ = 'users'  # テーブル名を指定
     id = Column(Integer, primary_key=True)  # IDは主キーとして自動インクリメントされる
     username = Column(String, unique=True, nullable=False)  # ユーザー名は一意である必要があり、nullは不可
@@ -16,10 +17,12 @@ class User(Base):
     
     # パスワードを設定するメソッド。パスワードをハッシュ化して保存
     def set_password(self, password):
+        """パスワードをハッシュ化して設定するメソッド"""
         self.password_hash = generate_password_hash(password)
     
     # 提供されたパスワードが正しいかどうかを検証するメソッド
     def check_password(self, password):
+        """提供されたパスワードが正しいかどうかを検証するメソッド"""
         return check_password_hash(self.password_hash, password)
 
 # データベース接続の設定。ここではSQLiteを使用している
@@ -43,3 +46,4 @@ if user.check_password('mysecurepassword'):  # 提供されたパスワードが
     print("認証成功")
 else:
     print("認証失敗")
+

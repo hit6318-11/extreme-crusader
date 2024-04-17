@@ -53,7 +53,6 @@ session.commit()
 session.close()
 
 
-
 excel_file = 'sutudentData.xlsx'
 df = pd.read_excel(excel_file,sheet_name='course',
                 dtype= {'number':'str',

@@ -1,40 +1,40 @@
 new Vue({
     el: '#app',
     data: {
-        credentials: {
-            username: '',
-            password: ''
+        credentials: { // 認証情報を格納するオブジェクト
+            username: '', // ユーザー名
+            password: '' // パスワード
         },
-        loginError: false,
-        errorMessage: 'Invalid username or password'
+        loginError: false, // ログインエラーフラグ
+        errorMessage: 'ユーザー名またはパスワードが無効です' // エラーメッセージ
     },
     methods: {
         login: function() {
-            // Construct the form data to be sent to the server-side route
+            // サーバーサイドのルートに送信するフォームデータを構築する
             const formData = new FormData();
             formData.append('username', this.credentials.username);
             formData.append('password', this.credentials.password);
 
-            // Send a POST request to the server-side route for authentication
+            // 認証用のサーバーサイドルートにPOSTリクエストを送信する
             fetch('/login', {
                 method: 'POST',
                 body: formData
             })
             .then(response => {
                 if (response.ok) {
-                    // Redirect to the search page upon successful login
+                    // ログイン成功時に検索ページにリダイレクトする
                     window.location.href = '/search';
                 } else {
-                    // Handle authentication failure
+                    // 認証失敗時の処理
                     this.loginError = true;
                 }
             })
             .catch(error => {
-                console.error('Error occurred during login:', error);
+                console.error('ログイン中にエラーが発生しました:', error);
             });
         },
         register: function() {
-            // Redirect to the user registration page
+            // ユーザー登録ページにリダイレクトする
             window.location.href = '/register';
         }
     }
