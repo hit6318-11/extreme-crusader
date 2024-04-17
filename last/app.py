@@ -185,6 +185,45 @@ def delete_course(course_id):
 
 
 
+@app.route('/api/users', methods=['GET'])
+def get_user():
+    users = db_session.query(User).all()
+    results = [{
+        'id': user.id,
+        'email': user.number,
+        'password': user.password,
+    } for user in users]
+    return jsonify(results)
+
+@app.route('/api/users', methods=['POST'])
+def create_user():
+    data = request.json
+    new_user = User(**data)
+    db_session.add(new_user)
+    db_session.commit()
+    return jsonify(new_user.id), 201
+
+@app.route('/api/users/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    data = request.json
+    user = db_session.query(User).get(user_id)
+    if user:
+        for key, value in data.items():
+            setattr(user, key, value)
+        db_session.commit()
+        return jsonify(success=True)
+    return jsonify(success=False), 404
+
+@app.route('/api/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = db_session.query(User).get(user_id)
+    if user:
+        db_session.delete(user)
+        db_session.commit()
+        return jsonify(success=True)
+    return jsonify(success=False), 404
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
