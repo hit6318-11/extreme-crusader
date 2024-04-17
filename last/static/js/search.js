@@ -10,6 +10,10 @@ function search() {
     })
     .then(response => response.json())
     .then(data => {
+        const oldResults = sessionStorage.getItem('searchResults');
+        if (oldResults){
+            sessionStorage.removeItem('searchResults');
+        }
         sessionStorage.setItem('searchResults', JSON.stringify(data));
         window.location.href = '/result';
     })

@@ -19,7 +19,7 @@ new Vue({
             }
         },
         editStudent(studentId) {
-            // sessionStorage.setItem('searchResults', JSON.stringify(this.students))
+            sessionStorage.setItem('searchResults', JSON.stringify(this.students))
             window.location.href = `/form?id=${studentId}`;
         },
         goBack() {
