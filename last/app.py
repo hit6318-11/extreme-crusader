@@ -1,7 +1,8 @@
 import json
 from flask import Flask, request, jsonify, session, render_template, request, url_for, redirect
 from sqlalchemy import or_
-from sqlalchemy.orm import scoped_session, sessionmaker
+from datetime import datetime
+from sqlalchemy.orm import scoped_session, sessionmaker, joinedload
 from databaseManager import Base, Student, User, Course, engine  # エンジンのインポート
 
 app = Flask(__name__)
@@ -35,19 +36,11 @@ def result():
 
 @app.route('/form')
 def form():
-    # 仮のクラスオプションデータ
-    # class_options = [
-    #     {'value': '1', 'text': 'クラス1'},
-    #     {'value': '2', 'text': 'クラス2'},
-    #     {'value': '3', 'text': 'クラス3'}
-    # ]
-    # class_optionsをテンプレートに渡す
-    # return render_template("form.html", classOptions=class_options)
     return render_template("form.html")
 
 
 @app.route('/confirm')
-def cconfirm():
+def confirm():
     return render_template("confirm.html")
 
 
@@ -55,6 +48,9 @@ def cconfirm():
 @app.route('/api/students', methods=['POST'])
 def create_student():
     data = request.json
+    # Convert birthday string to Python date object
+    if 'birthday' in data:
+        data['birthday'] = datetime.strptime(data['birthday'], '%Y-%m-%d').date()
     student = Student(**data)
     db_session.add(student)
     db_session.commit()
@@ -70,11 +66,8 @@ def get_students():
     if 'all' in query_parameters:  # 'all'パラメータが含まれる場合
         students = db_session.query(Student).all()  # 全ての学生を取得
     elif 'id' in query_parameters:
-        print("this is qp", query_parameters)
-        print("this is qp val", query_parameters['id'])
         studentId = int(query_parameters['id'])
         student = db_session.query(Student).filter(Student.id == studentId).first()
-        print("this is stuuuudent", student)
         result = [{
             'id':student.id,
             'name': f'{student.last_name} {student.first_name}',
@@ -124,6 +117,8 @@ def get_students():
 @app.route('/api/students/<int:student_id>', methods=['PUT'])
 def update_student(student_id):
     data = request.json
+    if 'birthday' in data:
+        data['birthday'] = datetime.strptime(data['birthday'], '%Y-%m-%d').date()
     student = db_session.query(Student).filter(Student.id == student_id).first()
     if student:
         for key, value in data.items():
