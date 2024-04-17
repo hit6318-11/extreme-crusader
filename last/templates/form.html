@@ -70,7 +70,15 @@
                 <div>
                     <label for="classId">クラス:</label>
                     <select id="classId" v-model="student.classId">
-                        <option v-for="selection in classOptions" :value="selection.value">{{ selection.text }}</option>
+                        <option v-for="selection in classOptions" :value="selection.id">{{ selection.course_number }}</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="status">修了:</label>
+                    <select id="status" v-model="student.status">
+                        <option value="1">在学中</option>
+                        <option value="2">修了</option>
+                        <option value="3">途中退校</option>
                     </select>
                 </div>
                 <button type="submit">送信</button>

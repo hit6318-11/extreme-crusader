@@ -18,18 +18,18 @@ class Student(Base):
     mobile_phone = Column(String(15), nullable=False)
     postal_code = Column(String(23), nullable=False)
     address = Column(String(256), nullable=False)
-    class_id = Column(Integer, ForeignKey('classes.id'), nullable=False)
+    course_id = Column(Integer, ForeignKey('courses.id'), nullable=False)
     status = Column(Integer, nullable=False)
-    class_ = relationship("Class", back_populates="students")
+    course_ = relationship("Course", back_populates="students")
 
-class Class(Base):
-    __tablename__ = 'classes'
+class Course(Base):
+    __tablename__ = 'courses'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    class_number = Column(String(6), nullable=False)
-    class_name = Column(String(64), nullable=False)
+    number = Column(String(6), nullable=False)
+    name = Column(String(64), nullable=False)
     classroom_id = Column(String(64), ForeignKey('classrooms.id'), nullable=False)
-    students = relationship("Student", back_populates="class_")
-    classroom = relationship("Classroom", back_populates="classes")
+    students = relationship("Student", back_populates="course_")
+    classroom = relationship("Classroom", back_populates="courses")
 
 class User(Base):
     __tablename__ = 'users'
@@ -41,7 +41,7 @@ class Classroom(Base):
     __tablename__ = 'classrooms'
     id = Column(Integer, primary_key=True, autoincrement=True)
     classroom_name = Column(String(256), nullable=False)
-    classes = relationship("Class", back_populates="classroom")
+    courses = relationship("Course", back_populates="classroom")
 
 # Initialize the database engine
 engine = create_engine('sqlite:///db/school.db')

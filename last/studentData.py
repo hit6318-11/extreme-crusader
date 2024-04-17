@@ -1,4 +1,4 @@
-from databaseManager import Student,Class
+from databaseManager import Student,Course
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -19,7 +19,7 @@ df = pd.read_excel(excel_file,sheet_name='student',
                         'mobile_phone':'str',
                         'postal_code':'str',
                         'address':'str',
-                        'class_id':'int',
+                        'course_id':'int',
                         'status':'int',
                         }
                 )
@@ -44,7 +44,7 @@ for index, row in df.iterrows():
         mobile_phone=row['mobile_phone'],
         postal_code=row['postal_code'],
         address=row['address'],
-        class_id=row['class_id'],
+        course_id=row['course_id'],
         status=row['status']
     )
     session.add(student)
@@ -55,9 +55,9 @@ session.close()
 
 
 excel_file = 'sutudentData.xlsx'
-df = pd.read_excel(excel_file,sheet_name='class',
-                dtype= {'class_number':'str',
-                        'class_name':'str',
+df = pd.read_excel(excel_file,sheet_name='course',
+                dtype= {'number':'str',
+                        'name':'str',
                         'classroom_id':'str',
                         })
 
@@ -68,12 +68,12 @@ session = Session()
 
 
 for index, row in df.iterrows():
-    classes = Class(
-        class_number=row['class_number'],
-        class_name=row['class_name'],
+    courses = Course(
+        number=row['number'],
+        name=row['name'],
         classroom_id=row['classroom_id'],
     )
-    session.add(classes)
+    session.add(courses)
 
 session.commit()
 session.close()

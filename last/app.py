@@ -2,7 +2,7 @@ import json
 from flask import Flask, request, jsonify, session, render_template, request, url_for, redirect
 from sqlalchemy import or_
 from sqlalchemy.orm import scoped_session, sessionmaker
-from databaseManager import Base, Student, User, engine  # エンジンのインポート
+from databaseManager import Base, Student, User, Course, engine  # エンジンのインポート
 
 app = Flask(__name__)
 
@@ -36,22 +36,20 @@ def result():
 @app.route('/form')
 def form():
     # 仮のクラスオプションデータ
-    class_options = [
-        {'value': '1', 'text': 'クラス1'},
-        {'value': '2', 'text': 'クラス2'},
-        {'value': '3', 'text': 'クラス3'}
-    ]
+    # class_options = [
+    #     {'value': '1', 'text': 'クラス1'},
+    #     {'value': '2', 'text': 'クラス2'},
+    #     {'value': '3', 'text': 'クラス3'}
+    # ]
     # class_optionsをテンプレートに渡す
-    return render_template("form.html", classOptions=class_options)
+    # return render_template("form.html", classOptions=class_options)
+    return render_template("form.html")
+
 
 @app.route('/confirm')
 def cconfirm():
     return render_template("confirm.html")
 
-
-#@app.route('/form')
-#def form():
-#    return render_template("form.html")
 
 # 学生エンドポイントの作成
 @app.route('/api/students', methods=['POST'])
@@ -71,6 +69,31 @@ def get_students():
 
     if 'all' in query_parameters:  # 'all'パラメータが含まれる場合
         students = db_session.query(Student).all()  # 全ての学生を取得
+    elif 'id' in query_parameters:
+        print("this is qp", query_parameters)
+        print("this is qp val", query_parameters['id'])
+        studentId = int(query_parameters['id'])
+        student = db_session.query(Student).filter(Student.id == studentId).first()
+        print("this is stuuuudent", student)
+        result = [{
+            'id':student.id,
+            'name': f'{student.last_name} {student.first_name}',
+            'lastName': student.last_name,
+            'firstName': student.first_name,
+            'lastNameKana': student.last_name_katakana,
+            'firstNameKana': student.first_name_katakana,
+            'birthday': student.birthday,
+            'gender': student.gender,
+            'email': student.email,
+            'phone': student.phone,
+            'mobilePhone': student.mobile_phone,
+            'postalCode': student.postal_code,
+            'address': student.address,
+            'classId': student.course_id,
+            'course_id': student.course_id,
+            'status': student.status
+        }]
+        return jsonify(result)
     else:
         base_query = db_session.query(Student)  # 学生テーブルからクエリを開始
         or_conditions = []
@@ -92,7 +115,7 @@ def get_students():
     results = [{
         'id': student.id,
         'name': f'{student.last_name} {student.first_name}',
-        'class_id': student.class_id
+        'course_id': student.course_id
     } for student in students]
     return jsonify(results)
 
@@ -119,6 +142,49 @@ def delete_student(student_id):
         db_session.commit()
         return jsonify(success=True)
     return jsonify(success=False), 404
+
+
+@app.route('/api/courses', methods=['GET'])
+def get_courses():
+    courses = db_session.query(Course).all()
+    results = [{
+        'id': course.id,
+        'course_number': course.number,
+        'course_name': course.name,
+        'classroom_id': course.classroom_id
+    } for course in courses]
+    return jsonify(results)
+
+@app.route('/api/courses', methods=['POST'])
+def create_course():
+    data = request.json
+    new_course = Course(**data)
+    db_session.add(new_course)
+    db_session.commit()
+    return jsonify(new_course.id), 201
+
+@app.route('/api/courses/<int:course_id>', methods=['PUT'])
+def update_course(course_id):
+    data = request.json
+    course = db_session.query(Course).get(course_id)
+    if course:
+        for key, value in data.items():
+            setattr(course, key, value)
+        db_session.commit()
+        return jsonify(success=True)
+    return jsonify(success=False), 404
+
+@app.route('/api/courses/<int:course_id>', methods=['DELETE'])
+def delete_course(course_id):
+    course = db_session.query(Course).get(course_id)
+    if course:
+        db_session.delete(course)
+        db_session.commit()
+        return jsonify(success=True)
+    return jsonify(success=False), 404
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
