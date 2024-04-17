@@ -75,6 +75,21 @@ new Vue({
         confirmDelete() {
             if (confirm('本当に削除してよろしいですか？')) {
                 // 削除処理
+                fetch(`/api/students/${this.student.id}`, {
+                    method:'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Response from server:', data);
+                    // Handle response if needed
+                })
+                .catch(error => {
+                    console.error('Error submitting data:', error);
+                    // Handle error if needed
+                });
                 window.location.href = '/confirm';
             }
         },

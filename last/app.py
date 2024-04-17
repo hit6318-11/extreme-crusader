@@ -69,7 +69,7 @@ def get_students():
         studentId = int(query_parameters['id'])
         student = db_session.query(Student).filter(Student.id == studentId).first()
         result = [{
-            'id':student.id,
+            'id': student.id,
             'name': f'{student.last_name} {student.first_name}',
             'lastName': student.last_name,
             'firstName': student.first_name,
@@ -83,6 +83,8 @@ def get_students():
             'postalCode': student.postal_code,
             'address': student.address,
             'classId': student.course_id,
+            'course_number': student.course_.number,
+            'course_name': student.course_.name,
             'course_id': student.course_id,
             'status': student.status
         }]
@@ -108,9 +110,25 @@ def get_students():
     results = [{
         'id': student.id,
         'name': f'{student.last_name} {student.first_name}',
-        'course_id': student.course_id
+        'lastName': student.last_name,
+        'firstName': student.first_name,
+        'lastNameKana': student.last_name_katakana,
+        'firstNameKana': student.first_name_katakana,
+        'birthday': student.birthday,
+        'gender': student.gender,
+        'email': student.email,
+        'phone': student.phone,
+        'mobilePhone': student.mobile_phone,
+        'postalCode': student.postal_code,
+        'address': student.address,
+        'classId': student.course_id,
+        'course_id': student.course_id,
+        'course_number': student.course_.number,
+        'course_name': student.course_.name,
+        'status': student.status
     } for student in students]
     return jsonify(results)
+
 
 
 # 学生の更新エンドポイント

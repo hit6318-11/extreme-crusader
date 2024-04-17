@@ -21,7 +21,8 @@
                         <th><input type="checkbox" id="checkAll" @change="toggleAllCheckboxes" /></th>
                         <th><button @click="toggleSort('id')" @dblclick="toggleSort('id', true)">ID</button></th>
                         <th><button @click="toggleSort('name')" @dblclick="toggleSort('name', true)">名前</button></th>
-                        <th><button @click="toggleSort('class')" @dblclick="toggleSort('class', true)">クラス</button></th>
+                        <th><button @click="toggleSort('class')" @dblclick="toggleSort('class', true)">クラス名</button></th>
+                        <th><button @click="toggleSort('classNum')" @dblclick="toggleSort('classNum', true)">クラス番号</button></th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -31,7 +32,9 @@
                         <td><input type="checkbox" :value="student.id" v-model="selectedStudents" /></td>
                         <td>{{ student.id }}</td>
                         <td>{{ student.name }}</td>
-                        <td>{{ student.class }}</td>
+                        <td>{{ student.course_name }}</td>
+                        <td>{{ student.course_number }}</td>
+
                         <td><button @click="editStudent(student.id)">編集</button></td>
                     </tr>
                 </tbody>

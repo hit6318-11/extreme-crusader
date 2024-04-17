@@ -11,6 +11,7 @@ new Vue({
         fetchResults() {
             const results = sessionStorage.getItem('searchResults');
             if (results) {
+                console.log(JSON.parse(results))
                 this.students = JSON.parse(results);
                 sessionStorage.removeItem('searchResults');
             } else {

@@ -83,6 +83,8 @@
                 </div>
                 <button type="submit">送信</button>
             </form>
+            <button v-if="!postReq" @click="confirmDelete">削除</button>
+
         </div>
     </section>
 </div>
