@@ -5,17 +5,22 @@ new Vue({
         students: [],  // 検索結果で得られた学生のリスト
         selectedStudents: [],  // チェックボックスで選択された学生のIDのリスト
         currentSortField: null,
-        isAscending: true
+        isAscending: true,
+        noResult:false
     },
     methods: {
         fetchResults() {
             const results = sessionStorage.getItem('searchResults');
-            if (results) {
+            if (results.length < 3) {
+                this.noResult = true;
+                console.log('No search results found.');
+            } else {
+                console.log("this is result", results);
+                console.log("this is length", results.length)
+                this.noResult = false;
                 console.log(JSON.parse(results))
                 this.students = JSON.parse(results);
                 sessionStorage.removeItem('searchResults');
-            } else {
-                console.log('No search results found.');
             }
         },
         editStudent(studentId) {

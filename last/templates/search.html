@@ -37,6 +37,7 @@
                 <input type="text" id="search_term" placeholder="Search...">
                 <button @click="search">Search</button>
                 <div id="results"></div>
+                <h1 v-if="invalid">無効な入力です。再試行してください。</h1>
             </div>
         </section>
     </div>

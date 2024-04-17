@@ -32,10 +32,10 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 # 新しいユーザーを追加する例
-# new_user = User(username='user1')
-# new_user.set_password('mysecurepassword')  # パスワードをハッシュ化して設定
-# session.add(new_user)  # 新しいユーザーをセッションに追加
-# session.commit()  # 変更をデータベースにコミット
+new_user = User(username='user')
+new_user.set_password('pass')  # パスワードをハッシュ化して設定
+session.add(new_user)  # 新しいユーザーをセッションに追加
+session.commit()  # 変更をデータベースにコミット
 
 # パスワード認証の例
 user = session.query(User).filter_by(username='user1').first()  # ユーザー名でユーザーを検索

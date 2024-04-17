@@ -1,7 +1,8 @@
 new Vue({
     el: '#app',
     data: {
-        username: 'ユーザー名'
+        username: 'ユーザー名',
+        invalid: false
     },
     methods: {
         search() {
@@ -16,6 +17,7 @@ new Vue({
             })
             .then(response => response.json())
             .then(data => {
+                this.invalid = false;
                 const oldResults = sessionStorage.getItem('searchResults');
                 if (oldResults){
                     sessionStorage.removeItem('searchResults');
@@ -24,6 +26,7 @@ new Vue({
                 window.location.href = '/result';
             })
             .catch(error => {
+                this.invalid = true;
                 console.error('Error fetching data:', error);
             });
         },
