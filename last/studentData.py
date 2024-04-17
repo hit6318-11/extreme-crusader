@@ -1,4 +1,4 @@
-from databaseManager import Student,Course
+from databaseManager import Student,Course, User
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -77,3 +77,12 @@ for index, row in df.iterrows():
 session.commit()
 session.close()
 
+engine = create_engine('sqlite:///db/school.db')
+Session = sessionmaker(bind=engine)
+session = Session()
+
+new_user = User(username='user')
+new_user.set_password('pass')  # パスワードをハッシュ化して設定
+session.add(new_user)  # 新しいユーザーをセッションに追加
+session.commit()  # 変更をデータベースにコミット
+session.close()

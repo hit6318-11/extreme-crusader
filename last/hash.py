@@ -40,10 +40,10 @@ new_user.set_password('pass')  # パスワードをハッシュ化して設定
 session.add(new_user)  # 新しいユーザーをセッションに追加
 session.commit()  # 変更をデータベースにコミット
 
-# パスワード認証の例
-user = session.query(User).filter_by(username='user1').first()  # ユーザー名でユーザーを検索
-if user.check_password('mysecurepassword'):  # 提供されたパスワードが正しいか検証
-    print("認証成功")
-else:
-    print("認証失敗")
+# # パスワード認証の例
+# user = session.query(User).filter_by(username='user').first()  # ユーザー名でユーザーを検索
+# if user.check_password('pass'):  # 提供されたパスワードが正しいか検証
+#     print("認証成功")
+# else:
+#     print("認証失敗")
 

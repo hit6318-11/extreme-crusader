@@ -3,8 +3,8 @@ from flask import Flask, request, jsonify, session, render_template, request, ur
 from sqlalchemy import or_
 from datetime import datetime
 from sqlalchemy.orm import scoped_session, sessionmaker, joinedload
-from databaseManager import Base, Student, Course, engine  # データベースエンジンのインポート
-from hash import User  # ユーザーハッシュのインポート
+from databaseManager import Base, Student, Course, User, engine  # データベースエンジンのインポート
+# from hash import User  # ユーザーハッシュのインポート
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'

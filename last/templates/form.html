@@ -12,12 +12,13 @@
         <span>{{ username }}</span>
         <button @click="logout">ログアウト</button>
     </header>
+
 {% raw %}
 
     <section>
         <div class="container">
-            <h2>生徒情報修正</h2>
-            
+            <h2 v-if="!postReq">生徒情報修正</h2>
+            <h2 v-if="postReq">生徒情報登録</h2>
             <form @submit.prevent="confirmAndSubmit">
                 <div>
                     <label for="lastName">姓:</label>

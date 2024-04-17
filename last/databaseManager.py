@@ -1,6 +1,8 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Date
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 Base = declarative_base()
 
@@ -39,6 +41,23 @@ class Classroom(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     classroom_name = Column(String(256), nullable=False)  # 教室名
     courses = relationship("Course", back_populates="classroom")  # コースとのリレーションシップ
+
+class User(Base):
+    """ユーザーテーブルのORMクラス"""
+    __tablename__ = 'users'  # テーブル名を指定
+    id = Column(Integer, primary_key=True)  # IDは主キーとして自動インクリメントされる
+    username = Column(String, unique=True, nullable=False)  # ユーザー名は一意である必要があり、nullは不可
+    password_hash = Column(String, nullable=False)  # パスワードハッシュ、nullは不可
+    
+    # パスワードを設定するメソッド。パスワードをハッシュ化して保存
+    def set_password(self, password):
+        """パスワードをハッシュ化して設定するメソッド"""
+        self.password_hash = generate_password_hash(password)
+    
+    # 提供されたパスワードが正しいかどうかを検証するメソッド
+    def check_password(self, password):
+        """提供されたパスワードが正しいかどうかを検証するメソッド"""
+        return check_password_hash(self.password_hash, password)
 
 # データベースエンジンの初期化
 engine = create_engine('sqlite:///db/school.db')
