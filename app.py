@@ -168,16 +168,32 @@ def update_student(student_id):
         return jsonify(success=True)
     return jsonify(success=False), 404
 
-# 学生の削除エンドポイント
-@app.route('/api/students/<int:student_id>', methods=['DELETE'])
-def delete_student(student_id):
-    student_int_id = int(student_id)
-    student = db_session.query(Student).filter(Student.id == student_int_id).first()
-    if student:
+
+@app.route('/api/students/delete', methods=['DELETE'])
+def delete_multiple_students():
+    # クエリパラメータから学生のIDを取得
+    student_ids = request.args.get('ids')
+    if not student_ids:
+        return jsonify({'success': False, 'message': 'No student IDs provided'}), 400
+
+    # 文字列のIDを整数のリストに変換し、無効な入力をチェック
+    try:
+        student_id_list = [int(id) for id in student_ids.split(',')]
+    except ValueError:
+        return jsonify({'success': False, 'message': 'Student IDs must be integers'}), 400
+
+    # 指定されたIDに基づいて学生を検索
+    students_to_delete = db_session.query(Student).filter(Student.id.in_(student_id_list)).all()
+    
+    if not students_to_delete:
+        return jsonify({'success': False, 'message': 'No students found with the provided IDs'}), 404
+
+    # 見つかった学生を削除
+    for student in students_to_delete:
         db_session.delete(student)
-        db_session.commit()
-        return jsonify(success=True)
-    return jsonify(success=False), 404
+    db_session.commit()
+    
+    return jsonify({'success': True, 'message': 'Students successfully deleted'})
 
 @app.route('/api/courses', methods=['GET'])
 def get_courses():

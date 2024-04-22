@@ -6,7 +6,9 @@ new Vue({
         selectedStudents: [],  // チェックボックスで選択された学生のIDのリスト
         currentSortField: null, // 現在のソートフィールド
         isAscending: true, // 昇順フラグ
-        noResult:false // 検索結果がない場合のフラグ
+        noResult:false, // 検索結果がない場合のフラグ
+        items:[]
+
     },
     methods: {
         fetchResults() {
@@ -26,6 +28,28 @@ new Vue({
         },
         goBack() {
             window.location.href = '/search'; // 検索ページに戻る
+        },
+        deleteSelected() {
+            if (this.selectedStudents.length > 0) {
+                if (confirm('選択した学生のデータを削除しますか？')) {
+                    axios.post('/api/students/delete', { studentIds: this.selectedStudents })
+                        .then(() => {
+                            this.updateStudentList();
+                            alert('選択したデータが削除されました。');
+                        })
+                        .catch(error => {
+                            console.error('削除に失敗しました:', error);
+                            alert('データの削除に失敗しました。');
+                        });
+                }
+            } else {
+                alert('削除する学生を選択してください。');
+            }
+        },
+        updateStudentList() {
+            // 選択された学生をリストから削除
+            this.students = this.students.filter(student => !this.selectedStudents.includes(student.id));
+            this.selectedStudents = []; // 選択状態をリセット
         },
         logout() {
             window.location.href = '/logout'; // ログアウト

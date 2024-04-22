@@ -14,11 +14,59 @@
             <button @click="logout">ログアウト</button>
         </header>
         <button @click="goBack">検索へ戻る</button>
-        <div class="search-results">
+        {% raw %}   
+        <button @click="deleteSelected">削除</button>
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" @change="toggleAllCheckboxes($event)" /></th>
+                    <th>ID</th>
+                    <th>名前</th>
+                    <th>クラス名</th>
+                    <th>クラス番号</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="student in students" :key="student.id">
+                    <td><input type="checkbox" :value="student.id" v-model="selectedStudents" /></td>
+                    <td>{{ student.id }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.course_name }}</td>
+                    <td>{{ student.course_number }}</td>
+                    <td><button @click="editStudent(student.id)">編集</button></td>
+                </tr>
+            </tbody>
+            {% endraw %}
+        </table>
+        <h1 v-if="noResult">表示する結果はありません。</h1>
+    </div>
+    <script src="../static/js/result.js"></script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="../static/css/result.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <span>{{ username }}</span>
+            <button @click="logout">ログアウト</button>
+        </header>
+        <button @click="goBack">検索へ戻る</button>
+        {% raw %}   
+        <button @click="deleteSelected">削除</button>
             <table>
                 <thead>
                     <tr>
-                        <th><input type="checkbox" id="checkAll" @change="toggleAllCheckboxes" /></th>
+                        <th><input type="checkbox" id="checkAll" @change="toggleAllCheckboxes($event)" /></th>
                         <th><button @click="toggleSort('id')" @dblclick="toggleSort('id', true)">ID</button></th>
                         <th><button @click="toggleSort('name')" @dblclick="toggleSort('name', true)">名前</button></th>
                         <th><button @click="toggleSort('course_name')" @dblclick="toggleSort('course_name', true)">クラス名</button></th>
@@ -26,7 +74,7 @@
                         <th>操作</th>
                     </tr>
                 </thead>
-                {% raw %}
+                
                 <tbody>
                     <tr v-for="student in students" :key="student.id">
                         <td><input type="checkbox" :value="student.id" v-model="selectedStudents" /></td>
@@ -44,4 +92,4 @@
     </div>
     <script src="../static/js/result.js"></script>
 </body>
-</html>
+</html> -->
