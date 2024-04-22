@@ -176,6 +176,7 @@ def delete_multiple_students():
     if not student_ids:
         return jsonify({'success': False, 'message': 'No student IDs provided'}), 400
 
+    student_id_list = [int(id) for id in student_ids.split(',')]
     # 文字列のIDを整数のリストに変換し、無効な入力をチェック
     try:
         student_id_list = [int(id) for id in student_ids.split(',')]

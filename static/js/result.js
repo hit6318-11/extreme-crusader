@@ -32,13 +32,14 @@ new Vue({
         deleteSelected() {
             if (this.selectedStudents.length > 0) {
                 if (confirm('選択した学生のデータを削除しますか？')) {
-                    axios.post('/api/students/delete', { studentIds: this.selectedStudents })
+                    axios.delete('/api/students/delete', { params: { ids: this.selectedStudents.join(',') } })
                         .then(() => {
                             this.updateStudentList();
                             alert('選択したデータが削除されました。');
                         })
                         .catch(error => {
                             console.error('削除に失敗しました:', error);
+                            console.log(error.response); // レスポンスの詳細を出力
                             alert('データの削除に失敗しました。');
                         });
                 }
