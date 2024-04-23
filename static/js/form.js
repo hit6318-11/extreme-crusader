@@ -72,27 +72,6 @@ new Vue({
                 console.error('データの取得中にエラーが発生しました:', error);
             });
         },
-        confirmDelete() {
-            if (confirm('本当に削除してよろしいですか？')) {
-                // 削除処理
-                fetch(`/api/students/${this.student.id}`, { // 学生を削除するAPIにリクエストを送信
-                    method:'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('サーバーからのレスポンス:', data);
-                    // 必要に応じてレスポンスを処理
-                })
-                .catch(error => {
-                    console.error('データの送信中にエラーが発生しました:', error);
-                    // 必要に応じてエラーを処理
-                });
-                window.location.href = '/confirm'; // 確認画面にリダイレクト
-            }
-        },
         confirmAndSubmit() {
             if (confirm('変更しますか？')) {
                 const birthdayDate = new Date(this.student.birthday);
